@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/phongnguyenswe/cmp-k8s-labs.git
-    targetRevision: part-1
+    targetRevision: part-2
     path: deploy/base
   destination:
     server: https://kubernetes.default.svc

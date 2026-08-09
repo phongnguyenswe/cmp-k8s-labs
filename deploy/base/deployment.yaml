@@ -15,10 +15,10 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: nginx:1.26-alpine
+          image: phongnguyenswe/demo-app:bootstrap
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
           readinessProbe:
             httpGet:
               path: /
