@@ -1,0 +1,19 @@
+replicaCount: 1
+
+image:
+  repository: phongnguyenswe/demo-app
+  tag: bootstrap
+  pullPolicy: IfNotPresent
+
+service:
+  port: 80
+  targetPort: 8080
+  selectorInstance: ""
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 32Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi

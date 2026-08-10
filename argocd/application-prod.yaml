@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-prod
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/phongnguyenswe/cmp-k8s-labs.git
+    targetRevision: part-3
+    path: deploy/helm/demo-app
+    helm:
+      releaseName: demo-app
+      valueFiles:
+        - values-prod.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: demo-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

@@ -2,7 +2,7 @@ name: Build image and update desired state
 
 on:
   push:
-    branches: [part-2]
+    branches: [part-3]
     paths:
       - "app/**"
       - ".github/workflows/ci.yaml"
@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: part-2-image-update
+  group: part-3-image-update
   cancel-in-progress: false
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: part-2
+          ref: part-3
           fetch-depth: 0
 
       - name: Set immutable image tag
@@ -43,22 +43,22 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/demo-app:${{ steps.vars.outputs.tag }}
 
-      - name: Update only the application image
+      - name: Update development image tag
         uses: mikefarah/yq@v4
         env:
-          IMAGE: ${{ secrets.DOCKER_USERNAME }}/demo-app:${{ steps.vars.outputs.tag }}
+          TAG: ${{ steps.vars.outputs.tag }}
         with:
-          cmd: yq -i '.spec.template.spec.containers[] |= select(.name == "nginx").image = strenv(IMAGE)' deploy/base/deployment.yaml
+          cmd: yq -i '.image.tag = strenv(TAG)' deploy/helm/demo-app/values-dev.yaml
 
-      - name: Commit desired state when changed
+      - name: Commit development desired state when changed
         shell: bash
         run: |
-          if git diff --quiet -- deploy/base/deployment.yaml; then
-            echo "Manifest already references this image; nothing to commit."
+          if git diff --quiet -- deploy/helm/demo-app/values-dev.yaml; then
+            echo "Development already references this image."
             exit 0
           fi
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git add deploy/base/deployment.yaml
-          git commit -m "chore: deploy image ${{ steps.vars.outputs.tag }} [skip ci]"
-          git push origin HEAD:part-2
+          git add deploy/helm/demo-app/values-dev.yaml
+          git commit -m "chore(dev): deploy image ${{ steps.vars.outputs.tag }} [skip ci]"
+          git push origin HEAD:part-3
