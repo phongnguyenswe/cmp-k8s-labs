@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/phongnguyenswe/cmp-k8s-labs.git
-    targetRevision: part-3
+    targetRevision: part-4
     path: deploy/helm/demo-app
     helm:
       releaseName: demo-app

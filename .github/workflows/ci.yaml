@@ -2,7 +2,7 @@ name: Build image and update desired state
 
 on:
   push:
-    branches: [part-3]
+    branches: [part-4]
     paths:
       - "app/**"
       - ".github/workflows/ci.yaml"
@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: part-3-image-update
+  group: part-4-image-update
   cancel-in-progress: false
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: part-3
+          ref: part-4
           fetch-depth: 0
 
       - name: Set immutable image tag
@@ -61,4 +61,4 @@ jobs:
           git config user.name "github-actions[bot]"
           git add deploy/helm/demo-app/values-dev.yaml
           git commit -m "chore(dev): deploy image ${{ steps.vars.outputs.tag }} [skip ci]"
-          git push origin HEAD:part-3
+          git push origin HEAD:part-4
