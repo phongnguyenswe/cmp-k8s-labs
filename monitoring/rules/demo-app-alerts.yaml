@@ -1,0 +1,26 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: demo-app-rules
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: demo-app.image-pull
+      rules:
+        - alert: DemoAppImagePullFailure
+          expr: |
+            max by (namespace, pod, container, reason) (
+              kube_pod_container_status_waiting_reason{
+                namespace="demo-dev",
+                container="nginx",
+                reason=~"ErrImagePull|ImagePullBackOff"
+              }
+            ) > 0
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Demo app cannot pull its container image"
+            description: "{{ $labels.namespace }}/{{ $labels.pod }} has been waiting because of {{ $labels.reason }} for more than one minute."
