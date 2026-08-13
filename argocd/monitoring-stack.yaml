@@ -14,7 +14,7 @@ spec:
         valueFiles:
           - $values/monitoring/values.yaml
     - repoURL: https://github.com/phongnguyenswe/cmp-k8s-labs.git
-      targetRevision: part-4
+      targetRevision: part-5
       ref: values
   destination:
     server: https://kubernetes.default.svc

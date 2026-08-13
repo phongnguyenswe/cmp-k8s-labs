@@ -1,5 +1,8 @@
 grafana:
-  adminPassword: MyGrafanaLab@2026
+  admin:
+    existingSecret: grafana-admin-credentials
+    userKey: admin-user
+    passwordKey: admin-password
   service:
     type: ClusterIP
 
